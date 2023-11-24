@@ -1,0 +1,11 @@
+div.window_wrapper {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #111;
+    width: 100vw;
+    height: 100vh;
+}

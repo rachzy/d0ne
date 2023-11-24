@@ -1,0 +1,12 @@
+div.content_box {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    border: 0.5vh solid chartreuse;
+    border-radius: 1rem;
+
+    padding: 3vh;
+}
