@@ -1,12 +1,35 @@
 div.content_box {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
 
-    border: 0.5vh solid chartreuse;
-    border-radius: 1rem;
+  border: 0.5vh solid chartreuse;
+  border-radius: 1rem;
 
-    padding: 3vh;
+  padding: 3vh;
+  min-width: 30vw;
+}
+
+@media screen and (max-width: 480px) {
+  div.content_box {
+    width: 100vw;
+    border: none;
+  }
+}
+
+div.content_box h2 {
+  margin-block: 3vh;
+}
+
+div.content_box input {
+  background: none;
+  color: white;
+  padding: 1vh;
+
+  border: 0.3vh solid chartreuse;
+  border-radius: 0.3rem;
+  outline: navajowhite;
+
+  margin-block: 1vh;
 }

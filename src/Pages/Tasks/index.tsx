@@ -1,11 +1,16 @@
-import React from "react";
-import ContentBox from "../../Components/ContentBox";
+import React, { Fragment } from "react";
 
-const Tasks = () => {
+import { ITask } from "../../interfaces/Task.interface";
+
+interface IProps {
+  tasks: ITask[];
+}
+
+const Tasks: React.FC<IProps> = ({ tasks }) => {
   return (
-    <ContentBox>
+    <Fragment>
       <h1>Tasks page</h1>
-    </ContentBox>
+    </Fragment>
   );
 };
 

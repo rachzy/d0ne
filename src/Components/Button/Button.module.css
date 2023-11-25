@@ -12,4 +12,5 @@ button.main_button {
     letter-spacing: 0.2em;
 
     border-radius: 2vh;
+    margin-block: 1vh;
 }

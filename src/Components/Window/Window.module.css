@@ -1,11 +1,30 @@
-div.window_wrapper {
-    display: flex;
-    flex-direction: column;
+@keyframes growIn {
+  0% {
+    width: 0vw;
+  }
 
-    justify-content: center;
-    align-items: center;
-
-    background-color: #111;
+  100% {
     width: 100vw;
-    height: 100vh;
+  }
+}
+
+div.window_wrapper {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  opacity: 0%;
+  transition: 0.5s all;
+
+  animation: growIn 1s;
+  text-align: center;
+}
+
+div.window_wrapper.active {
+  opacity: 100%;
 }

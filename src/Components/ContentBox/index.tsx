@@ -1,16 +1,18 @@
-import React from 'react'
-import classes from './ContentBox.module.css';
+import React, { useEffect } from "react";
+import classes from "./ContentBox.module.css";
 
 interface IProps {
-    children: React.ReactNode;
+  onLoad: () => void;
+  dependencies?: unknown[];
+  children: React.ReactNode;
 }
 
-const ContentBox: React.FC<IProps> = ({children}) => {
-  return (
-    <div className={classes.content_box}>
-        {children}
-    </div>
-  )
-}
+const ContentBox: React.FC<IProps> = ({ onLoad, dependencies, children }) => {
+  useEffect(() => {
+    onLoad();
+  }, dependencies || []);
 
-export default ContentBox
+  return <div className={`${classes.content_box}`}>{children}</div>;
+};
+
+export default ContentBox;

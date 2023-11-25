@@ -1,16 +1,17 @@
-import React from 'react'
-import classes from './Window.module.css';
+import React from "react";
+import classes from "./Window.module.css";
 
 interface IProps {
-    children: React.ReactNode;
+  visible: boolean;
+  children: React.ReactNode;
 }
 
-const Window: React.FC<IProps> = ({children}) => {
+const Window: React.FC<IProps> = ({ children, visible }) => {
   return (
-    <div className={classes.window_wrapper}>
-        {children}
+    <div className={`${classes.window_wrapper} ${visible && classes.active}`}>
+      {children}
     </div>
-  )
-}
+  );
+};
 
-export default Window
+export default Window;

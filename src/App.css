@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&family=Dosis&display=swap');
 
 * {
   padding: 0;
@@ -6,7 +6,11 @@
   box-sizing: border-box;
   color: white;
 
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #111;
 }
 
 button {
