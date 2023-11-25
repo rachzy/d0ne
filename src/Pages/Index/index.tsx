@@ -1,35 +1,21 @@
-import React, { Fragment, MutableRefObject, useRef, useEffect } from "react";
+import React, { Fragment, MutableRefObject, useRef } from "react";
 
 import Button from "../../Components/Button";
 import { IPage } from "../../interfaces/Page.interface";
 import Title from "../../Components/Title";
-
-interface IProps extends IPage {
-  authenticated: boolean;
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 interface IInputValues {
   email: string;
   password: string;
 }
 
-const Index: React.FC<IProps> = ({
-  authenticated,
-  setAuthenticated,
-  redirectFunction,
-}) => {
-  useEffect(() => {
-    if (!authenticated) return;
-    redirectFunction("/tasks");
-  }, [authenticated, redirectFunction]);
-
+const Index: React.FC<IPage> = ({ setAuthenticated, redirect }) => {
   const emailInput = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
   const callbackError = useRef() as MutableRefObject<HTMLParagraphElement>;
   const inputs = [emailInput, passwordInput];
 
-  function handleButtonClick() {
+  function handleLoginButtonClick() {
     let inputValues: IInputValues | object = {};
     inputs.forEach((input) => {
       const { name, value } = input.current;
@@ -51,6 +37,12 @@ const Index: React.FC<IProps> = ({
     setAuthenticated(true);
   }
 
+  function handleRegisterButtonClick() {
+    if (!redirect) return;
+
+    redirect("/register");
+  }
+
   return (
     <Fragment>
       <Title>d0ne</Title>
@@ -62,7 +54,7 @@ const Index: React.FC<IProps> = ({
         name="email"
         ref={emailInput}
         type="email"
-        placeholder="Your email address.."
+        placeholder="Your email address..."
       />
       <input
         name="password"
@@ -70,9 +62,11 @@ const Index: React.FC<IProps> = ({
         type="password"
         placeholder="Your password..."
       />
-      <Button onClick={handleButtonClick}>Login</Button>
+      <Button onClick={handleLoginButtonClick}>Login</Button>
       <h3 style={{ marginTop: "5vh" }}>New here?</h3>
-      <Button backgroundColor="aqua">Create account</Button>
+      <Button onClick={handleRegisterButtonClick} backgroundColor="aqua">
+        Create account
+      </Button>
     </Fragment>
   );
 };

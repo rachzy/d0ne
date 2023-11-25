@@ -1,3 +1,4 @@
 export interface IPage {
-  redirectFunction: (urn: string) => void;
+  redirect: (urn: string) => void;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }

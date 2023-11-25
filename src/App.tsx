@@ -10,11 +10,12 @@ import AddTask from "./Pages/AddTask";
 import { IUser } from "./interfaces/User.interface";
 import { ITask } from "./interfaces/Task.interface";
 import ContentBox from "./Components/ContentBox";
+import Register from "./Pages/Register";
 
 const App = () => {
   const navigate = useNavigate();
 
-  const [visibleWindow, setVisibleWindow] = useState(false);
+  const [visibleWindow, setVisibleWindow] = useState(true);
 
   const [authenticated, setAuthenticated] = useState(false);
   const [userData, setUserData] = useState<IUser | null>(null);
@@ -25,6 +26,7 @@ const App = () => {
 
     setTimeout(() => {
       navigate(urn);
+      setVisibleWindow(true);
     }, 500);
   }
 
@@ -50,6 +52,8 @@ const App = () => {
     }, 1000);
   }, [userData]);
 
+  const pageProps = { setVisibleWindow, authenticated, redirectFunction };
+
   return (
     <Window visible={visibleWindow}>
       <Routes>
@@ -57,15 +61,26 @@ const App = () => {
           index
           element={
             <ContentBox
-              onLoad={() => {
-                setVisibleWindow(true);
-              }}
+              authRequirement={"not_authenticated"}
+              {...pageProps}
             >
               <Index
-                authenticated={authenticated}
                 setAuthenticated={setAuthenticated}
-                setVisible={setVisibleWindow}
-                redirectFunction={redirectFunction}
+                redirect={redirectFunction}
+              />
+            </ContentBox>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <ContentBox
+              authRequirement={"not_authenticated"}
+              {...pageProps}
+            >
+              <Register
+                setAuthenticated={setAuthenticated}
+                redirect={redirectFunction}
               />
             </ContentBox>
           }
@@ -74,12 +89,8 @@ const App = () => {
           path="tasks"
           element={
             <ContentBox
-              onLoad={() => {
-                console.log("try");
-                if (!tasks) return;
-                setVisibleWindow(true);
-              }}
-              dependencies={[tasks]}
+              authRequirement="authenticated"
+              {...pageProps}
             >
               <Tasks tasks={tasks} />
             </ContentBox>
