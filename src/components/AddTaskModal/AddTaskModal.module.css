@@ -1,0 +1,61 @@
+div.modal_window {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 0vw;
+    height: 100vh;
+
+    align-self: flex-start;
+
+    position: absolute;
+    z-index: 999;
+
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: 0.5s all;
+
+    overflow: hidden;
+}
+
+div.modal_window.active {
+    width: 100vw;
+}
+
+div.modal_window div.sub_content {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #111;
+    padding: 4vh;
+
+    row-gap: 2vh;
+    min-width: 30vw;
+
+    border-radius: 2vh;
+}
+
+div.modal_window div.sub_content svg {
+    align-self: flex-end;
+    cursor: pointer;
+
+    transition: 0.2s all;
+}
+
+div.modal_window div.sub_content svg:hover {
+    transform: scale(1.1);
+}
+
+div.modal_window div.sub_content input, div.modal_window div.sub_content textarea  {
+    background: none;
+    border: 0.3vh solid chartreuse;
+    outline: none;
+
+    border-radius: 0.5rem;
+
+    width: 100%;
+    padding: 1vh;
+}

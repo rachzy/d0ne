@@ -1,0 +1,13 @@
+button.option {
+    width: 100%;
+    height: auto;
+
+    font-weight: bold;
+    background: none;
+
+    padding: 2vh;
+}
+
+button.option.selected {
+    background-color: var(--defaultblue);
+}
