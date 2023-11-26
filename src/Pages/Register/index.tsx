@@ -1,6 +1,6 @@
 import React, { Fragment, MutableRefObject, useRef } from "react";
-import Title from "../../Components/Title";
-import Button from "../../Components/Button";
+import Title from "../../components/Title";
+import Button from "../../components/Button";
 import { IPage } from "../../interfaces/Page.interface";
 
 interface IInputValues {
@@ -72,7 +72,7 @@ const Register: React.FC<IPage> = ({setAuthenticated, redirect}) => {
       />
       <Button onClick={handleLoginButtonClick}>Sign up</Button>
       <h3 style={{ marginTop: "5vh" }}>Already have an account?</h3>
-      <Button onClick={handleRegisterButtonClick} backgroundColor="aqua">
+      <Button onClick={handleRegisterButtonClick} backgroundColor="var(--defaultblue)">
         Log in
       </Button>
     </Fragment>

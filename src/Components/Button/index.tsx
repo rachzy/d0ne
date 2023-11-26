@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Button.module.css";
+import Loader from "../Loader";
 
 interface IProps {
   children: string;
   backgroundColor?: string;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 const Button: React.FC<IProps> = ({ children, backgroundColor, onClick }) => {
+  const [loadingAnimation, setLoadingAnimation] = useState(false);
+
   return (
     <button
       className={classes.main_button}
       style={{ backgroundColor }}
-      onClick={onClick}
+      onClick={async () => {
+        setLoadingAnimation(true);
+        await onClick();
+        setLoadingAnimation(false);
+      }}
     >
-      {children}
+      {loadingAnimation ? <Loader /> : children}
     </button>
   );
 };

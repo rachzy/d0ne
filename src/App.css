@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&family=Dosis&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Poppins:wght@200&family=Roboto&family=Dosis&display=swap");
 
 * {
   padding: 0;
@@ -9,8 +9,13 @@
   font-family: "Poppins", sans-serif;
 }
 
+:root {
+  --defaultblue: #318CE7;
+}
+
 body {
   background-color: #111;
+  overflow-x: hidden;
 }
 
 button {
@@ -22,5 +27,27 @@ button {
 }
 
 button:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #58ff0a #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 1vh;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #58ff0a;
+    border-radius: 1vh;
+  }

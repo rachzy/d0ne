@@ -1,8 +1,8 @@
 import React, { Fragment, MutableRefObject, useRef } from "react";
 
-import Button from "../../Components/Button";
+import Button from "../../components/Button";
 import { IPage } from "../../interfaces/Page.interface";
-import Title from "../../Components/Title";
+import Title from "../../components/Title";
 
 interface IInputValues {
   email: string;
@@ -64,7 +64,7 @@ const Index: React.FC<IPage> = ({ setAuthenticated, redirect }) => {
       />
       <Button onClick={handleLoginButtonClick}>Login</Button>
       <h3 style={{ marginTop: "5vh" }}>New here?</h3>
-      <Button onClick={handleRegisterButtonClick} backgroundColor="aqua">
+      <Button onClick={handleRegisterButtonClick} backgroundColor="var(--defaultblue)">
         Create account
       </Button>
     </Fragment>

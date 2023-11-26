@@ -1,4 +1,12 @@
 button.main_button {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    max-height: 7vh;
+    overflow: hidden;
+
     font-family: 'Poppins', sans-serif;
     background-color: rgba(128, 255, 0, 0.705);
     padding: 1vh;

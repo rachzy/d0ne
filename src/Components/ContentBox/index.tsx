@@ -16,7 +16,7 @@ const ContentBox: React.FC<IProps> = ({
   children,
   authRequirement: pageType,
   authenticated,
-  redirectFunction
+  redirectFunction,
 }) => {
   const navigate = useNavigate();
 
@@ -37,7 +37,11 @@ const ContentBox: React.FC<IProps> = ({
     }
   }, [authenticated, navigate, pageType, redirectFunction]);
 
-  return <div className={`${classes.content_box}`}>{children}</div>;
+  return (
+    <div className={`${classes.content_box}`}>
+      <div className={`${classes.subcontent}`}>{children}</div>
+    </div>
+  );
 };
 
 export default ContentBox;
