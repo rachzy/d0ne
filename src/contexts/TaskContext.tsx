@@ -5,10 +5,12 @@ import { serverDomain } from "../config.json";
 
 import { ITask } from "../interfaces/Task.interface";
 import { IAuthentication } from "../App";
+import { ICreateTask } from "../interfaces/CreateTask.interface";
 
 export interface ITaskContext {
   tasks: ITask[];
-  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
+  editTask: (taskId: number, task: ICreateTask) => void;
+  createTask: (task: ICreateTask) => void;
   removeTask: (taskId: number) => void;
 }
 
@@ -34,14 +36,51 @@ const TaskContextWrapper: React.FC<IProps> = ({ authentication, children }) => {
     fetchTasks();
   }, [authentication]);
 
-  function removeTask(taskId: number) {
+  async function createTask(task: ICreateTask) {
+    const newLocalTask: ITask = {
+      id: Date.now(),
+      ...task,
+    };
+
+    setTasks((currentValue) => [newLocalTask, ...currentValue]);
+
+    await Axios.post(`${serverDomain}/tasks/add`, task, {
+      withCredentials: true,
+    });
+  }
+
+  async function editTask(taskId: number, task: ICreateTask) {
+    const { title, description, completed } = task;
+
+    const newLocalTask = {
+      id: Date.now(),
+      title,
+      description,
+      completed,
+    };
+
+    setTasks((currentValue) => {
+      const oldTasks = currentValue.filter((task) => task.id !== taskId);
+      return [newLocalTask, ...oldTasks];
+    });
+
+    await Axios.put(`${serverDomain}/tasks/edit?id=${taskId}`, task, {
+      withCredentials: true,
+    });
+  }
+
+  async function removeTask(taskId: number) {
     setTasks((currentValue) =>
       currentValue.filter((task) => task.id !== taskId)
     );
+
+    await Axios.delete(`${serverDomain}/tasks/delete?id=${taskId}`, {
+      withCredentials: true,
+    });
   }
 
   return (
-    <TasksContext.Provider value={{ tasks, setTasks, removeTask }}>
+    <TasksContext.Provider value={{ tasks, createTask, editTask, removeTask }}>
       {children}
     </TasksContext.Provider>
   );

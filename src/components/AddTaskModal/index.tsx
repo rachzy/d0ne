@@ -12,6 +12,7 @@ import { ITask } from "../../interfaces/Task.interface";
 import Switcher, { IOption } from "../Switcher";
 import { FaTimes } from "react-icons/fa";
 import { ITaskContext, TasksContext } from "../../contexts/TaskContext";
+import { ICreateTask } from "../../interfaces/CreateTask.interface";
 
 export interface IModal {
   title?: string;
@@ -37,7 +38,7 @@ interface IProps {
 }
 
 const AddTaskModal: React.FC<IProps> = ({ children }) => {
-  const { setTasks } = useContext(TasksContext) as ITaskContext;
+  const { createTask, editTask } = useContext(TasksContext) as ITaskContext;
 
   const [modalData, setModalData] = useState<IModal>({ visible: false });
   const [completedTask, setCompletedTask] = useState(false);
@@ -108,27 +109,16 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
       return (callbackError.current.textContent =
         "Please fill all the fields.");
 
+    const newTask: ICreateTask = {
+      title,
+      description,
+      completed: completedTask,
+    };
     if (modalData.task) {
       const { id } = modalData.task;
-      setTasks((currentValue) => {
-        const oldTasks = currentValue.filter((task) => task.id !== id);
-        return [
-          { id, title, description, completed: completedTask },
-          ...oldTasks,
-        ];
-      });
+      editTask(id, newTask);
     } else {
-      setTasks((currentValue) => {
-        return [
-          {
-            id: Date.now(),
-            title,
-            description,
-            completed: completedTask,
-          },
-          ...currentValue,
-        ];
-      });
+      createTask(newTask);
     }
 
     vanishModal();
