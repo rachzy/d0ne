@@ -1,4 +1,5 @@
 import React, { Fragment, useContext, useState } from "react";
+import { FaRightFromBracket } from "react-icons/fa6";
 
 import Task from "../../components/Task";
 import Loader from "../../components/Loader";
@@ -8,15 +9,17 @@ import Button from "../../components/Button";
 import { AddTaskModalContext } from "../../components/AddTaskModal";
 import { ITaskContext, TasksContext } from "../../contexts/TaskContext";
 import { IUserContext, UserContext } from "../../contexts/UserContext";
+import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
 
 const Tasks = () => {
+  const {logout} = useContext(AuthContext) as IAuthContext;
   const { tasks, removeTask } = useContext(TasksContext) as ITaskContext;
   const { user } = useContext(UserContext) as IUserContext;
 
   const [filterTasksByCompleted, setFilterTasksByCompleted] = useState(false);
   const addTaskModal = useContext(AddTaskModalContext);
 
-  if (!user || !tasks || tasks.length === 0) return <Loader />;
+  if (!user || !tasks) return <Loader />;
 
   const { nickname } = user;
 
@@ -38,6 +41,7 @@ const Tasks = () => {
   ];
 
   function renderTasks(): React.ReactNode {
+    if(!tasks) return;
     return tasks.map((task) => {
       if (task.completed !== filterTasksByCompleted) return null;
       return <Task key={task.id} task={task} deleteTask={removeTask} />;
@@ -51,6 +55,7 @@ const Tasks = () => {
 
   return (
     <Fragment>
+      <FaRightFromBracket onClick={logout} />
       <h2>Welcome, {nickname}</h2>
       <h3>Order your tasks by:</h3>
       <Switcher options={switcherOptions} />

@@ -13,6 +13,7 @@ div.task {
 
   width: 100%;
 
+  fill: chartreuse;
   border: 0.5vh solid chartreuse;
   border-radius: 1rem;
 
@@ -23,16 +24,23 @@ div.task {
   transition: 0.2s all;
 }
 
+div.task.completed {
+  fill: yellow;
+  border: 0.5vh solid yellow;
+}
+
 div.task.visible_description {
   max-height: 100vh;
 }
 
 div.task div.header {
+  fill: inherit;
   display: flex;
   justify-content: space-between;
 }
 
 div.task div.header div {
+  fill: inherit;
   display: flex;
 
   align-items: center;
@@ -48,7 +56,7 @@ div.task div.header svg {
 }
 
 div.task div.header svg:hover {
-  fill: chartreuse;
+  fill: inherit;
 }
 
 div.task h3 {

@@ -5,20 +5,22 @@ import { serverDomain } from "../config.json";
 
 import useFetch from "../hooks/useFetch";
 import { ISessionResponse } from "../interfaces/SessionResponse.interface";
+import { ICreateUser } from "../interfaces/CreateUser.interface";
 
 interface IAuthentication {
   authenticated: boolean;
   loading: boolean;
 }
 
-export interface ILoginResponse {
+export interface IRequestResponse {
   message: string;
   successful: boolean;
 }
 
 export interface IAuthContext {
   authentication: IAuthentication;
-  login: (email: string, password: string) => Promise<ILoginResponse>;
+  register: (newUser: ICreateUser) => Promise<IRequestResponse>;
+  login: (email: string, password: string) => Promise<IRequestResponse>;
   logout: () => void;
 }
 
@@ -43,11 +45,55 @@ const AuthContextWrapper: React.FC<IProps> = ({ children }) => {
     });
   }, [data, loading]);
 
+  async function register(newUser: ICreateUser): Promise<IRequestResponse> {
+    let finalResponse: IRequestResponse;
+
+    try {
+      await Axios.post(`${serverDomain}/user/register`, newUser, {
+        withCredentials: true,
+      });
+      setAuthentication({
+        authenticated: true,
+        loading: false,
+      });
+
+      finalResponse = {
+        message: "Account successfully crated",
+        successful: true,
+      };
+    } catch (error) {
+      if (!(error instanceof AxiosError) || !error.response) {
+        return (finalResponse = {
+          message: "The server is offline. Please, try again later.",
+          successful: false,
+        });
+      }
+
+      const { status, data } = error.response;
+
+      if (!data.message) {
+        return (finalResponse = {
+          message: `The server returned and unknown error (${status}). Please, try again later.`,
+          successful: false,
+        });
+      }
+
+      const { message } = data;
+
+      finalResponse = {
+        message: message,
+        successful: false,
+      };
+    }
+
+    return finalResponse;
+  }
+
   async function login(
     email: string,
     password: string
-  ): Promise<ILoginResponse> {
-    let finalResponse: ILoginResponse;
+  ): Promise<IRequestResponse> {
+    let finalResponse: IRequestResponse;
 
     try {
       await Axios.get(
@@ -101,7 +147,7 @@ const AuthContextWrapper: React.FC<IProps> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ authentication, login, logout }}>
+    <AuthContext.Provider value={{ authentication, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
