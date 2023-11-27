@@ -1,5 +1,4 @@
 import React, { Fragment, useContext, useState } from "react";
-import { FaRightFromBracket } from "react-icons/fa6";
 
 import Task from "../../components/Task";
 import Loader from "../../components/Loader";
@@ -10,6 +9,7 @@ import { AddTaskModalContext } from "../../components/AddTaskModal";
 import { ITaskContext, TasksContext } from "../../contexts/TaskContext";
 import { IUserContext, UserContext } from "../../contexts/UserContext";
 import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
+import SignOutIcon from "../../components/SignOutIcon";
 
 const Tasks = () => {
   const {logout} = useContext(AuthContext) as IAuthContext;
@@ -55,7 +55,7 @@ const Tasks = () => {
 
   return (
     <Fragment>
-      <FaRightFromBracket onClick={logout} />
+      <SignOutIcon onClick={logout} />
       <h2>Welcome, {nickname}</h2>
       <h3>Order your tasks by:</h3>
       <Switcher options={switcherOptions} />
