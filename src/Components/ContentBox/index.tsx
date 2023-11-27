@@ -1,24 +1,21 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
 import classes from "./ContentBox.module.css";
 
 import { defaultPaths } from "../../config.json";
+import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
 
 interface IProps {
   children: React.ReactNode;
   authenticated: boolean;
   authRequirement: "authenticated" | "not_authenticated" | "neutral";
-  redirectFunction: (urn: string) => void;
-  setVisibleWindow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ContentBox: React.FC<IProps> = ({
   children,
   authRequirement: pageType,
   authenticated,
-  redirectFunction,
 }) => {
-  const navigate = useNavigate();
+  const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   useEffect(() => {
     switch (pageType) {
@@ -35,7 +32,7 @@ const ContentBox: React.FC<IProps> = ({
       default:
         break;
     }
-  }, [authenticated, navigate, pageType, redirectFunction]);
+  }, [authenticated, pageType, redirectFunction]);
 
   return (
     <div className={`${classes.content_box}`}>

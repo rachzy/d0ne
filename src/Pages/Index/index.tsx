@@ -1,21 +1,24 @@
-import React, { Fragment, MutableRefObject, useRef } from "react";
+import React, { Fragment, MutableRefObject, useRef, useContext } from "react";
 
 import Button from "../../components/Button";
 import { IPage } from "../../interfaces/Page.interface";
 import Title from "../../components/Title";
+import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
 
 interface IInputValues {
   email: string;
   password: string;
 }
 
-const Index: React.FC<IPage> = ({ setAuthenticated, redirect }) => {
+const Index: React.FC<IPage> = ({ setAuthenticated }) => {
+  const { redirectFunction } = useContext(WindowContext) as IWindowContext;
+  
   const emailInput = useRef() as MutableRefObject<HTMLInputElement>;
   const passwordInput = useRef() as MutableRefObject<HTMLInputElement>;
   const callbackError = useRef() as MutableRefObject<HTMLParagraphElement>;
   const inputs = [emailInput, passwordInput];
 
-  function handleLoginButtonClick() {
+  async function handleLoginButtonClick() {
     let inputValues: IInputValues | object = {};
     inputs.forEach((input) => {
       const { name, value } = input.current;
@@ -38,9 +41,9 @@ const Index: React.FC<IPage> = ({ setAuthenticated, redirect }) => {
   }
 
   function handleRegisterButtonClick() {
-    if (!redirect) return;
+    if (!redirectFunction) return;
 
-    redirect("/register");
+    redirectFunction("/register");
   }
 
   return (

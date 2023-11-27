@@ -3,6 +3,7 @@ import React, {
   useRef,
   createContext,
   useState,
+  useContext,
 } from "react";
 import classes from "./AddTaskModal.module.css";
 
@@ -10,6 +11,7 @@ import Button from "../Button";
 import { ITask } from "../../interfaces/Task.interface";
 import Switcher, { IOption } from "../Switcher";
 import { FaTimes } from "react-icons/fa";
+import { ITaskContext, TasksContext } from "../../contexts/TaskContext";
 
 export interface IModal {
   title?: string;
@@ -32,10 +34,11 @@ interface IInputValues {
 
 interface IProps {
   children: React.ReactNode;
-  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 }
 
-const AddTaskModal: React.FC<IProps> = ({ children, setTasks }) => {
+const AddTaskModal: React.FC<IProps> = ({ children }) => {
+  const { setTasks } = useContext(TasksContext) as ITaskContext;
+
   const [modalData, setModalData] = useState<IModal>({ visible: false });
   const [completedTask, setCompletedTask] = useState(false);
 
@@ -66,10 +69,10 @@ const AddTaskModal: React.FC<IProps> = ({ children, setTasks }) => {
   function showModal(data?: Omit<IModal, "visible">) {
     setModalData({ ...data, visible: true });
 
-    if(!data) {
-        inputs.forEach((input) => input.current.value = "");
+    if (!data) {
+      inputs.forEach((input) => (input.current.value = ""));
     }
-  } 
+  }
 
   function vanishModal() {
     setModalData({ visible: false });
@@ -110,19 +113,19 @@ const AddTaskModal: React.FC<IProps> = ({ children, setTasks }) => {
       setTasks((currentValue) => {
         const oldTasks = currentValue.filter((task) => task.id !== id);
         return [
-            { id, title, description, completed: completedTask },
+          { id, title, description, completed: completedTask },
           ...oldTasks,
         ];
       });
     } else {
       setTasks((currentValue) => {
         return [
-            {
-              id: Date.now(),
-              title,
-              description,
-              completed: completedTask,
-            },
+          {
+            id: Date.now(),
+            title,
+            description,
+            completed: completedTask,
+          },
           ...currentValue,
         ];
       });

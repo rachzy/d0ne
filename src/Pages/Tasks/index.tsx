@@ -1,21 +1,18 @@
 import React, { Fragment, useContext, useState } from "react";
 
-import { ITask } from "../../interfaces/Task.interface";
-import { IUser } from "../../interfaces/User.interface";
 import Task from "../../components/Task";
 import Loader from "../../components/Loader";
 import TasksWrapper from "../../components/TasksWrapper";
 import Switcher, { IOption } from "../../components/Switcher";
 import Button from "../../components/Button";
 import { AddTaskModalContext } from "../../components/AddTaskModal";
+import { ITaskContext, TasksContext } from "../../contexts/TaskContext";
+import { IUserContext, UserContext } from "../../contexts/UserContext";
 
-interface IProps {
-  user: IUser | null;
-  tasks: ITask[];
-  deleteTask: (id: number) => void;
-}
+const Tasks = () => {
+  const { tasks, removeTask } = useContext(TasksContext) as ITaskContext;
+  const { user } = useContext(UserContext) as IUserContext;
 
-const Tasks: React.FC<IProps> = ({ tasks, user, deleteTask }) => {
   const [filterTasksByCompleted, setFilterTasksByCompleted] = useState(false);
   const addTaskModal = useContext(AddTaskModalContext);
 
@@ -43,12 +40,12 @@ const Tasks: React.FC<IProps> = ({ tasks, user, deleteTask }) => {
   function renderTasks(): React.ReactNode {
     return tasks.map((task) => {
       if (task.completed !== filterTasksByCompleted) return null;
-      return <Task key={task.id} task={task} deleteTask={deleteTask} />;
+      return <Task key={task.id} task={task} deleteTask={removeTask} />;
     });
   }
 
   function handleButtonClick() {
-    if(!addTaskModal) return;
+    if (!addTaskModal) return;
     addTaskModal.showModal();
   }
 

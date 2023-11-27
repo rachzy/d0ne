@@ -1,5 +1,5 @@
 {
-    "serverDomain": "localhost:3000",
+    "serverDomain": "http://localhost:3000",
     "defaultPaths": {
         "notAuthenticated": "/",
         "alreadyAuthenticated": "/tasks"

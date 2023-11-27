@@ -1,7 +1,8 @@
-import React, { Fragment, MutableRefObject, useRef } from "react";
+import React, { Fragment, MutableRefObject, useRef, useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { IPage } from "../../interfaces/Page.interface";
+import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
 
 interface IInputValues {
   nickname: string;
@@ -9,7 +10,9 @@ interface IInputValues {
   password: string;
 }
 
-const Register: React.FC<IPage> = ({setAuthenticated, redirect}) => {
+const Register: React.FC<IPage> = ({ setAuthenticated }) => {
+  const { redirectFunction } = useContext(WindowContext) as IWindowContext;
+
   const callbackError = useRef() as MutableRefObject<HTMLParagraphElement>;
   const [nicknameInput, emailInput, passwordInput] = [
     useRef() as MutableRefObject<HTMLInputElement>,
@@ -33,7 +36,7 @@ const Register: React.FC<IPage> = ({setAuthenticated, redirect}) => {
       callbackError.current.textContent = "Please fill all the fields.";
       return inputs.forEach((input) => {
         const { value } = input.current;
-        if (value) return input.current.style.borderColor = "chartreuse";
+        if (value) return (input.current.style.borderColor = "chartreuse");
         input.current.style.borderColor = "red";
       });
     }
@@ -42,7 +45,7 @@ const Register: React.FC<IPage> = ({setAuthenticated, redirect}) => {
   }
 
   function handleRegisterButtonClick() {
-    redirect('/');
+    redirectFunction("/");
   }
 
   return (
@@ -72,7 +75,10 @@ const Register: React.FC<IPage> = ({setAuthenticated, redirect}) => {
       />
       <Button onClick={handleLoginButtonClick}>Sign up</Button>
       <h3 style={{ marginTop: "5vh" }}>Already have an account?</h3>
-      <Button onClick={handleRegisterButtonClick} backgroundColor="var(--defaultblue)">
+      <Button
+        onClick={handleRegisterButtonClick}
+        backgroundColor="var(--defaultblue)"
+      >
         Log in
       </Button>
     </Fragment>
