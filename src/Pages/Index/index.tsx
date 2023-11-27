@@ -1,8 +1,5 @@
 import React, { Fragment, MutableRefObject, useRef, useContext } from "react";
 
-import Axios, { AxiosError } from "axios";
-import { serverDomain } from "../../config.json";
-
 import Button from "../../components/Button";
 import Title from "../../components/Title";
 import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
@@ -14,7 +11,7 @@ interface IInputValues {
 }
 
 const Index = () => {
-  const { setAuthentication } = useContext(AuthContext) as IAuthContext;
+  const { login } = useContext(AuthContext) as IAuthContext;
   const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   const emailInput = useRef() as MutableRefObject<HTMLInputElement>;
@@ -30,6 +27,11 @@ const Index = () => {
   }
 
   async function handleLoginButtonClick() {
+    callbackError.current.textContent = "";
+    inputs.forEach((input) => {
+      input.current.style.borderColor = "chartreuse";
+    });
+
     let inputValues: IInputValues | object = {};
     inputs.forEach((input) => {
       const { name, value } = input.current;
@@ -49,31 +51,15 @@ const Index = () => {
       });
     }
 
-    try {
-      await Axios.get(
-        `${serverDomain}/user/auth?email=${email}&password=${password}`,
-        { withCredentials: true }
-      );
-      setAuthentication({
-        authenticated: true,
-        loading: false,
-      });
-    } catch (error) {
-      inputs.forEach((input) => {
-        input.current.style.borderColor = "red";
-      });
+    const loginRequest = await login(email, password);
+    const { message, successful } = loginRequest;
 
-      if (!(error instanceof AxiosError) || !error.response)
-        return (callbackError.current.textContent = `The server is currently offline. Please, try again later.`);
+    if (successful) return;
 
-      const { data, status } = error.response;
-
-      if (data && data.message) {
-        callbackError.current.textContent = data.message;
-      } else {
-        callbackError.current.textContent = `The server returned an unknown error(${status}). Please, try again later.`;
-      }
-    }
+    callbackError.current.textContent = message;
+    inputs.forEach((input) => {
+      input.current.style.borderColor = "red";
+    });
   }
 
   function handleRegisterButtonClick() {
