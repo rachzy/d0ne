@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 
 import Axios from "axios";
 import { serverDomain } from "../config.json";
 
 import { ITask } from "../interfaces/Task.interface";
-import { IAuthentication } from "../App";
 import { ICreateTask } from "../interfaces/CreateTask.interface";
+import { AuthContext, IAuthContext } from "./AuthContext";
 
 export interface ITaskContext {
   tasks: ITask[];
@@ -15,13 +15,13 @@ export interface ITaskContext {
 }
 
 interface IProps {
-  authentication: IAuthentication;
   children: React.ReactNode;
 }
 
 export const TasksContext = createContext<ITaskContext | null>(null);
 
-const TaskContextWrapper: React.FC<IProps> = ({ authentication, children }) => {
+const TaskContextWrapper: React.FC<IProps> = ({ children }) => {
+  const { authentication } = useContext(AuthContext) as IAuthContext;
   const [tasks, setTasks] = useState<ITask[]>([]);
 
   useEffect(() => {

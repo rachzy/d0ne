@@ -4,16 +4,17 @@ import Axios, { AxiosError } from "axios";
 import { serverDomain } from "../../config.json";
 
 import Button from "../../components/Button";
-import { IPage } from "../../interfaces/Page.interface";
 import Title from "../../components/Title";
 import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
+import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
 
 interface IInputValues {
   email: string;
   password: string;
 }
 
-const Index: React.FC<IPage> = ({ setAuthentication }) => {
+const Index = () => {
+  const { setAuthentication } = useContext(AuthContext) as IAuthContext;
   const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   const emailInput = useRef() as MutableRefObject<HTMLInputElement>;
@@ -23,7 +24,7 @@ const Index: React.FC<IPage> = ({ setAuthentication }) => {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     const { key } = e;
-    if(key.toUpperCase() !== "ENTER") return;
+    if (key.toUpperCase() !== "ENTER") return;
 
     handleLoginButtonClick();
   }
@@ -55,7 +56,7 @@ const Index: React.FC<IPage> = ({ setAuthentication }) => {
       );
       setAuthentication({
         authenticated: true,
-        loading: false
+        loading: false,
       });
     } catch (error) {
       inputs.forEach((input) => {

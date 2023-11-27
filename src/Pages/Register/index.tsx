@@ -1,8 +1,8 @@
 import React, { Fragment, MutableRefObject, useRef, useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
-import { IPage } from "../../interfaces/Page.interface";
 import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
+import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
 
 interface IInputValues {
   nickname: string;
@@ -10,7 +10,8 @@ interface IInputValues {
   password: string;
 }
 
-const Register: React.FC<IPage> = ({ setAuthentication }) => {
+const Register = () => {
+  const { setAuthentication } = useContext(AuthContext) as IAuthContext;
   const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   const callbackError = useRef() as MutableRefObject<HTMLParagraphElement>;
