@@ -14,24 +14,32 @@ import TaskContextWrapper from "./contexts/TaskContext";
 import UserContextWrapper from "./contexts/UserContext";
 import WindowContextWrapper from "./contexts/WindowContext";
 
-const App = () => {
-  const validateSession = useFetch<ISessionResponse>("user/validateSession");
+export interface IAuthentication {
+  authenticated: boolean;
+  loading: boolean;
+}
 
-  const [authenticated, setAuthenticated] = useState(false);
+const App = () => {
+  const {data, loading } = useFetch<ISessionResponse>("user/validateSession");
+
+  const [authentication, setAuthentication] = useState<IAuthentication>({
+    authenticated: false,
+    loading: true,
+  });
 
   useEffect(() => {
-    const { data, loading, error } = validateSession;
+    setAuthentication({
+      authenticated: data?.validSession || false,
+      loading: loading,
+    });
+  }, [data, loading]);
 
-    if (loading || error || !data?.validSession) return;
-    setAuthenticated(true);
-  }, [validateSession]);
-
-  const pageProps = { authenticated };
+  const pageProps = { authentication };
 
   return (
     <WindowContextWrapper>
-      <UserContextWrapper authenticated={authenticated}>
-        <TaskContextWrapper authenticated={authenticated}>
+      <UserContextWrapper authentication={authentication}>
+        <TaskContextWrapper authentication={authentication}>
           <AddTaskModal>
             <Routes>
               <Route
@@ -41,9 +49,7 @@ const App = () => {
                     authRequirement={"not_authenticated"}
                     {...pageProps}
                   >
-                    <Index
-                      setAuthenticated={setAuthenticated}
-                    />
+                    <Index setAuthentication={setAuthentication} />
                   </ContentBox>
                 }
               />
@@ -54,9 +60,7 @@ const App = () => {
                     authRequirement={"not_authenticated"}
                     {...pageProps}
                   >
-                    <Register
-                      setAuthenticated={setAuthenticated}
-                    />
+                    <Register setAuthentication={setAuthentication} />
                   </ContentBox>
                 }
               />

@@ -4,6 +4,7 @@ import Axios from "axios";
 import { serverDomain } from "../config.json";
 
 import { ITask } from "../interfaces/Task.interface";
+import { IAuthentication } from "../App";
 
 export interface ITaskContext {
   tasks: ITask[];
@@ -12,24 +13,26 @@ export interface ITaskContext {
 }
 
 interface IProps {
-  authenticated: boolean;
+  authentication: IAuthentication;
   children: React.ReactNode;
 }
 
 export const TasksContext = createContext<ITaskContext | null>(null);
 
-const TaskContextWrapper: React.FC<IProps> = ({ authenticated, children }) => {
+const TaskContextWrapper: React.FC<IProps> = ({ authentication, children }) => {
   const [tasks, setTasks] = useState<ITask[]>([]);
 
   useEffect(() => {
-    if (!authenticated) return;
+    if (authentication.loading || !authentication.authenticated) return;
 
     async function fetchTasks() {
-      const { data } = await Axios.get(`${serverDomain}/tasks/get`);
+      const { data } = await Axios.get(`${serverDomain}/tasks/get`, {
+        withCredentials: true,
+      });
       setTasks(data);
     }
     fetchTasks();
-  }, [authenticated]);
+  }, [authentication]);
 
   function removeTask(taskId: number) {
     setTasks((currentValue) =>

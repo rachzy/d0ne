@@ -3,36 +3,39 @@ import classes from "./ContentBox.module.css";
 
 import { defaultPaths } from "../../config.json";
 import { IWindowContext, WindowContext } from "../../contexts/WindowContext";
+import { IAuthentication } from "../../App";
 
 interface IProps {
   children: React.ReactNode;
-  authenticated: boolean;
+  authentication: IAuthentication;
   authRequirement: "authenticated" | "not_authenticated" | "neutral";
 }
 
 const ContentBox: React.FC<IProps> = ({
   children,
   authRequirement: pageType,
-  authenticated,
+  authentication,
 }) => {
   const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   useEffect(() => {
+    if(authentication.loading) return;
+
     switch (pageType) {
       case "authenticated":
-        if (!authenticated) {
+        if (!authentication.authenticated) {
           redirectFunction(defaultPaths.notAuthenticated);
         }
         break;
       case "not_authenticated":
-        if (authenticated) {
+        if (authentication.authenticated) {
           redirectFunction(defaultPaths.alreadyAuthenticated);
         }
         break;
       default:
         break;
     }
-  }, [authenticated, pageType, redirectFunction]);
+  }, [authentication, pageType, redirectFunction]);
 
   return (
     <div className={`${classes.content_box}`}>

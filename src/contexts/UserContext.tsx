@@ -4,35 +4,36 @@ import Axios from "axios";
 import { serverDomain } from "../config.json";
 
 import { IUser } from "../interfaces/User.interface";
+import { IAuthentication } from "../App";
 
 export interface IUserContext {
   user: IUser | null;
 }
 
 interface IProps {
-  authenticated: boolean;
+  authentication: IAuthentication;
   children: React.ReactNode;
 }
 
 export const UserContext = createContext<IUserContext | null>(null);
 
-const UserContextWrapper: React.FC<IProps> = ({ authenticated, children }) => {
+const UserContextWrapper: React.FC<IProps> = ({ authentication, children }) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   useEffect(() => {
-    if (!authenticated) return;
+    if (authentication.loading || !authentication.authenticated) return;
 
     async function fetchUser() {
-      const { data } = await Axios.get(`${serverDomain}/user/getNickname`);
+      const { data } = await Axios.get(`${serverDomain}/user/getData`, {
+        withCredentials: true,
+      });
       setUser(data);
     }
     fetchUser();
-  }, [authenticated]);
+  }, [authentication]);
 
   return (
-    <UserContext.Provider value={{ user }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
   );
 };
 

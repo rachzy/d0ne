@@ -10,7 +10,7 @@ interface IInputValues {
   password: string;
 }
 
-const Register: React.FC<IPage> = ({ setAuthenticated }) => {
+const Register: React.FC<IPage> = ({ setAuthentication }) => {
   const { redirectFunction } = useContext(WindowContext) as IWindowContext;
 
   const callbackError = useRef() as MutableRefObject<HTMLParagraphElement>;
@@ -41,7 +41,10 @@ const Register: React.FC<IPage> = ({ setAuthenticated }) => {
       });
     }
 
-    setAuthenticated(true);
+    setAuthentication({
+      authenticated: true,
+      loading: false,
+    });
   }
 
   function handleRegisterButtonClick() {

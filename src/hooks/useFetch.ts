@@ -8,17 +8,17 @@ export default function useFetch<T = unknown>(urn: string) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | unknown>(null);
-
+  
   useEffect(() => {
     async function fetchData() {
-      setLoading(true);
-
       try {
-        const { data } = await Axios.get(`${serverDomain}/${urn}`);
+        const { data } = await Axios.get(`${serverDomain}/${urn}`, {withCredentials: true});
         setData(data);
       } catch (error) {
         setError(error);
       }
+
+      setLoading(false);
     }
     fetchData();
   }, [urn]);

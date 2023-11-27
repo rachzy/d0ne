@@ -1,3 +1,5 @@
+import { IAuthentication } from "../App";
+
 export interface IPage {
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setAuthentication: React.Dispatch<React.SetStateAction<IAuthentication>>;
 }
