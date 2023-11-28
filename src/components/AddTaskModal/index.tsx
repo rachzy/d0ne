@@ -70,13 +70,18 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
   function showModal(data?: Omit<IModal, "visible">) {
     setModalData({ ...data, visible: true });
 
-    if (!data) {
-      inputs.forEach((input) => (input.current.value = ""));
+    if (!data || !data.task) {
+      return inputs.forEach((input) => (input.current.value = ""));
     }
+
+    const { title, description, completed } = data.task;
+    titleInput.current.value = title;
+    descriptionInput.current.value = description;
+    setCompletedTask(completed);
   }
 
   function vanishModal() {
-    inputs.forEach((input) => (input.current.value = ""));
+    inputs.forEach((input) => (input.current.defaultValue = ""));
     setModalData({ task: undefined, visible: false });
   }
 
@@ -143,14 +148,12 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
             placeholder="Task title..."
             type="text"
             ref={titleInput}
-            defaultValue={modalData.task?.title || ""}
             minLength={1}
           />
           <textarea
             name="description"
             placeholder="Task description..."
             ref={descriptionInput}
-            defaultValue={modalData.task?.description || ""}
             minLength={0}
           ></textarea>
           <Switcher options={completedOptions} />
