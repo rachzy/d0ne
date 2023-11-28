@@ -13,7 +13,7 @@ div.modal_window {
     z-index: 999;
 
     background-color: rgba(0, 0, 0, 0.7);
-    transition: 0.5s all;
+    transition: 0.2s all;
 
     overflow: hidden;
 }

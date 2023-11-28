@@ -12,11 +12,12 @@ import { AuthContext, IAuthContext } from "../../contexts/AuthContext";
 import SignOutIcon from "../../components/SignOutIcon";
 
 const Tasks = () => {
-  const {logout} = useContext(AuthContext) as IAuthContext;
+  const { logout } = useContext(AuthContext) as IAuthContext;
   const { tasks, removeTask } = useContext(TasksContext) as ITaskContext;
   const { user } = useContext(UserContext) as IUserContext;
 
   const [filterTasksByCompleted, setFilterTasksByCompleted] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const addTaskModal = useContext(AddTaskModalContext);
 
   if (!user || !tasks) return <Loader />;
@@ -24,7 +25,12 @@ const Tasks = () => {
   const { nickname } = user;
 
   function handleSwitchOptionClick(newValue: boolean) {
-    setFilterTasksByCompleted(newValue);
+    setTransitioning(true);
+
+    setTimeout(() => {
+      setFilterTasksByCompleted(newValue);
+      setTransitioning(false);
+    }, 100);
   }
 
   const switcherOptions: IOption[] = [
@@ -41,7 +47,8 @@ const Tasks = () => {
   ];
 
   function renderTasks(): React.ReactNode {
-    if(!tasks) return;
+    if (!tasks) return;
+
     return tasks.map((task) => {
       if (task.completed !== filterTasksByCompleted) return null;
       return <Task key={task.id} task={task} deleteTask={removeTask} />;
@@ -59,7 +66,7 @@ const Tasks = () => {
       <h2>Welcome, {nickname}</h2>
       <h3>Order your tasks by:</h3>
       <Switcher options={switcherOptions} />
-      <TasksWrapper>{renderTasks()}</TasksWrapper>
+      <TasksWrapper transitioning={transitioning}>{renderTasks()}</TasksWrapper>
       <Button onClick={handleButtonClick}>+ Create Task</Button>
     </Fragment>
   );

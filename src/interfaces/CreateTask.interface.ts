@@ -1,3 +1,3 @@
 import { ITask } from "./Task.interface";
 
-export type ICreateTask = Omit<ITask, "id">;
+export type ICreateTask = Omit<ITask, "id" | "inactive">;

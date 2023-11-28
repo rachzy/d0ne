@@ -3,4 +3,5 @@ export interface ITask {
     title: string;
     description: string;
     completed: boolean;
+    inactive: boolean;
 }

@@ -21,6 +21,7 @@ div.task {
 
   max-height: 8vh;
 
+  animation: fadeIn 0.2s;
   transition: 0.2s all;
 }
 
@@ -31,6 +32,17 @@ div.task.completed {
 
 div.task.visible_description {
   max-height: 100vh;
+}
+
+div.task.active {
+  opacity: 100%;
+}
+
+div.task.inactive {
+  max-height: 0vh;
+  border: none;
+  overflow: hidden;
+  padding: 0;
 }
 
 div.task div.header {

@@ -15,7 +15,7 @@ const Task: React.FC<IProps> = ({ task, deleteTask }) => {
   const [visibleDescription, setVisibleDescription] = useState(false);
   const addTaskModal = useContext(AddTaskModalContext);
 
-  const { title, description, completed } = task;
+  const { title, description, completed, inactive } = task;
 
   function handleShowDescriptionIconClick() {
     setVisibleDescription((currentValue) => !currentValue);
@@ -33,7 +33,7 @@ const Task: React.FC<IProps> = ({ task, deleteTask }) => {
     <div
       className={`${classes.task} ${completed && classes.completed} ${
         visibleDescription && classes.visible_description
-      }`}
+      } ${inactive ? classes.inactive : classes.active}`}
     >
       <div className={`${classes.header}`}>
         <div>

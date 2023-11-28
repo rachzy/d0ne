@@ -39,48 +39,76 @@ const TaskContextWrapper: React.FC<IProps> = ({ children }) => {
   async function createTask(task: ICreateTask) {
     if (!tasks) return;
 
+    const { data } = await Axios.post<ITask>(
+      `${serverDomain}/tasks/add`,
+      task,
+      {
+        withCredentials: true,
+      }
+    );
+
     const newLocalTask: ITask = {
-      id: Date.now(),
-      ...task,
+      ...data,
+      inactive: false,
     };
 
-    setTasks((currentValue) => [newLocalTask, ...(currentValue as ITask[])]);
+    setTasks((currentValue) => [
+      { ...newLocalTask, inactive: true },
+      ...(currentValue as ITask[]),
+    ]);
 
-    await Axios.post(`${serverDomain}/tasks/add`, task, {
-      withCredentials: true,
-    });
+    setTimeout(() => {
+      setTasks((currentValue) => {
+        if (!currentValue) return null;
+
+        const oldTasks = currentValue?.filter((task) => task.id !== data.id);
+        return [newLocalTask, ...oldTasks];
+      });
+    }, 200);
   }
 
   async function editTask(taskId: number, task: ICreateTask) {
-    const { title, description, completed } = task;
+    const { data } = await Axios.put<ITask>(
+      `${serverDomain}/tasks/edit?id=${taskId}`,
+      task,
+      {
+        withCredentials: true,
+      }
+    );
 
-    const newLocalTask = {
-      id: Date.now(),
-      title,
-      description,
-      completed,
+    const newLocalTask: ITask = {
+      ...data,
+      inactive: false,
     };
 
     setTasks((currentValue) => {
-      if(!currentValue) return null;
+      if (!currentValue) return null;
 
       const oldTasks = currentValue.filter((task) => task.id !== taskId);
       return [newLocalTask, ...oldTasks];
     });
-
-    await Axios.put(`${serverDomain}/tasks/edit?id=${taskId}`, task, {
-      withCredentials: true,
-    });
   }
 
   async function removeTask(taskId: number) {
-    if(!tasks) return;
+    if (!tasks) return;
 
     setTasks((currentValue) => {
-      if(!currentValue) return null;
-      return currentValue.filter((task) => task.id !== taskId)
-    }
-    );
+      if (!currentValue) return null;
+      return currentValue.map((task) => {
+        if (task.id !== taskId) return task;
+        return {
+          ...task,
+          inactive: true,
+        };
+      });
+    });
+
+    setTimeout(() => {
+      setTasks((currentValue) => {
+        if (!currentValue) return null;
+        return currentValue.filter((task) => task.id !== taskId);
+      });
+    }, 200);
 
     await Axios.delete(`${serverDomain}/tasks/delete?id=${taskId}`, {
       withCredentials: true,

@@ -76,7 +76,8 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
   }
 
   function vanishModal() {
-    setModalData({ visible: false });
+    inputs.forEach((input) => (input.current.value = ""));
+    setModalData({ task: undefined, visible: false });
   }
 
   const changeModal: IChangeModal = {
@@ -85,13 +86,13 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
     visibleModal: modalData.visible,
   };
 
-  function handleButtonClick() {
+  async function handleButtonClick() {
     callbackError.current.textContent = "";
 
     let inputValues: IInputValues | object = {};
     inputs.forEach((input) => {
-      const { name, value } = input.current;
-      if (!value) {
+      const { name, minLength, value } = input.current;
+      if (value.length < minLength) {
         input.current.style.borderColor = "red";
       } else {
         input.current.style.borderColor = "chartreuse";
@@ -105,7 +106,7 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
 
     const { title, description } = inputValues as IInputValues;
 
-    if (!title || !description)
+    if (!title)
       return (callbackError.current.textContent =
         "Please fill all the fields.");
 
@@ -116,9 +117,9 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
     };
     if (modalData.task) {
       const { id } = modalData.task;
-      editTask(id, newTask);
+      await editTask(id, newTask);
     } else {
-      createTask(newTask);
+      await createTask(newTask);
     }
 
     vanishModal();
@@ -143,12 +144,14 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
             type="text"
             ref={titleInput}
             defaultValue={modalData.task?.title || ""}
+            minLength={1}
           />
           <textarea
             name="description"
             placeholder="Task description..."
             ref={descriptionInput}
             defaultValue={modalData.task?.description || ""}
+            minLength={0}
           ></textarea>
           <Switcher options={completedOptions} />
           <Button onClick={handleButtonClick}>

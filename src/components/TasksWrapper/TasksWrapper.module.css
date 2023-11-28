@@ -21,4 +21,11 @@ div.tasks_wrapper {
 
     overflow-y: scroll;
     animation: fadeIn 0.5s;
+
+    opacity: 100%;
+    transition: 0.2s all;
+}
+
+div.tasks_wrapper.transitioning {
+    opacity: 0%;
 }
