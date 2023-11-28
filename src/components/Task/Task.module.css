@@ -1,0 +1,108 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+div.task {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  fill: chartreuse;
+  border: 0.5vh solid chartreuse;
+  border-radius: 1rem;
+
+  padding: 1vh;
+
+  max-height: 8vh;
+
+  animation: fadeIn 0.2s;
+  transition: 0.2s all;
+}
+
+div.task.completed {
+  fill: yellow;
+  border: 0.5vh solid yellow;
+}
+
+div.task.visible_description {
+  max-height: 100vh;
+}
+
+div.task.active {
+  opacity: 100%;
+}
+
+div.task.inactive {
+  max-height: 0vh;
+  border: none;
+  overflow: hidden;
+  padding: 0;
+}
+
+div.task div.header {
+  fill: inherit;
+  display: flex;
+  justify-content: space-between;
+}
+
+div.task div.header div {
+  fill: inherit;
+  display: flex;
+
+  align-items: center;
+
+  max-width: 70%;
+  column-gap: 1vh;
+}
+
+div.task div.header svg {
+  cursor: pointer;
+  transition: 0.2s all;
+  font-size: 3vh;
+}
+
+div.task div.header svg:hover {
+  fill: inherit;
+}
+
+div.task h3 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  overflow: hidden;
+}
+
+div.task p {
+  transition: 0.2s all;
+  text-align: start;
+
+  font-weight: 100;
+  display: none;
+
+  max-width: 30vw;
+}
+
+@media screen and (max-width: 768px) {
+    div.task p {
+        max-width: 100%;
+    }
+}
+
+div.task.visible_description p {
+  display: block;
+  animation: fadeIn 0.2s;
+}
+
+div.task svg.openDescription {
+  transform: rotate(0deg);
+}
+
+div.task.visible_description svg.openDescription {
+  transform: rotate(90deg);
+}

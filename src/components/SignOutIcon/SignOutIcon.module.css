@@ -1,0 +1,17 @@
+svg.icon {
+    position: absolute;
+    align-self: flex-end;
+
+    top: 0;
+
+    font-size: 4vh;
+
+    cursor: pointer;
+    transition: 0.2s all;
+
+    margin-top: 4vh;
+}
+
+svg.icon:hover {
+    fill: chartreuse;
+}
