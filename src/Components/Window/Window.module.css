@@ -23,6 +23,8 @@ div.window_wrapper {
 
   animation: growIn 1s;
   text-align: center;
+
+  overflow: hidden;
 }
 
 div.window_wrapper.active {

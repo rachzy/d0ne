@@ -95,6 +95,13 @@ const Register = () => {
     });
   }
 
+  function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    const {key} = e;
+
+    if(key.toUpperCase() !== "ENTER") return;
+    handleRegisterButtonClick();
+  }
+
   function handleLoginButtonClick() {
     redirectFunction("/");
   }
@@ -137,6 +144,7 @@ const Register = () => {
         placeholder="Confirm your password..."
         minLength={4}
         maxLength={128}
+        onKeyDown={handleInputKeyDown}
       />
       <Button onClick={handleRegisterButtonClick}>Sign up</Button>
       <h3 style={{ marginTop: "5vh" }}>Already have an account?</h3>
