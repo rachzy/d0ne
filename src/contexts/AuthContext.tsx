@@ -1,11 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import Axios, { AxiosError } from "axios";
-import { serverDomain } from "../config.json";
 
 import useFetch from "../hooks/useFetch";
 import { ISessionResponse } from "../interfaces/SessionResponse.interface";
 import { ICreateUser } from "../interfaces/CreateUser.interface";
+import { IServerContext, ServerContext } from "./ServerContext";
 
 interface IAuthentication {
   authenticated: boolean;
@@ -32,6 +32,8 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 
 const AuthContextWrapper: React.FC<IProps> = ({ children }) => {
   const { data, loading } = useFetch<ISessionResponse>("user/validateSession");
+
+  const { serverDomain } = useContext(ServerContext) as IServerContext;
 
   const [authentication, setAuthentication] = useState<IAuthentication>({
     authenticated: false,
