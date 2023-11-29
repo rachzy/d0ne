@@ -1,5 +1,8 @@
 {
-  "serverDomain": "http://localhost:3000",
+  "serverDomains": {
+    "local": "http://localhost:3000",
+    "production": "https://d0ne-backend.onrender.com"
+  },
   "defaultPaths": {
     "notAuthenticated": "/",
     "alreadyAuthenticated": "/tasks"
