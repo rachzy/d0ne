@@ -10,7 +10,7 @@ import { AuthContext, IAuthContext } from "./AuthContext";
 export interface ITaskContext {
   tasks: ITask[] | null;
   editTask: (taskId: number, task: ICreateTask) => void;
-  createTask: (task: ICreateTask) => void;
+  createTask: (task: ICreateTask) => Promise<boolean>;
   removeTask: (taskId: number) => void;
 }
 
@@ -36,35 +36,46 @@ const TaskContextWrapper: React.FC<IProps> = ({ children }) => {
     fetchTasks();
   }, [authentication]);
 
-  async function createTask(task: ICreateTask) {
-    if (!tasks) return;
+  async function createTask(task: ICreateTask): Promise<boolean> {
+    if (!tasks) return false;
 
-    const { data } = await Axios.post<ITask>(
-      `${serverDomain}/tasks/add`,
-      task,
-      {
-        withCredentials: true,
-      }
-    );
+    let successfull = true;
 
-    const newLocalTask: ITask = {
-      ...data,
-      inactive: false,
-    };
+    try {
+      const { data } = await Axios.post<ITask>(
+        `${serverDomain}/tasks/add`,
+        task,
+        {
+          withCredentials: true,
+        }
+      );
 
-    setTasks((currentValue) => [
-      { ...newLocalTask, inactive: true },
-      ...(currentValue as ITask[]),
-    ]);
+      console.log(data);
 
-    setTimeout(() => {
-      setTasks((currentValue) => {
-        if (!currentValue) return null;
+      const newLocalTask: ITask = {
+        ...data,
+        inactive: false,
+      };
 
-        const oldTasks = currentValue?.filter((task) => task.id !== data.id);
-        return [newLocalTask, ...oldTasks];
-      });
-    }, 200);
+      setTasks((currentValue) => [
+        { ...newLocalTask, inactive: true },
+        ...(currentValue as ITask[]),
+      ]);
+
+      setTimeout(() => {
+        setTasks((currentValue) => {
+          if (!currentValue) return null;
+
+          const oldTasks = currentValue?.filter((task) => task.id !== data.id);
+          console.log(...oldTasks);
+          return [newLocalTask, ...oldTasks];
+        });
+      }, 200);
+    } catch (error) {
+      successfull = false;
+    }
+
+    return successfull;
   }
 
   async function editTask(taskId: number, task: ICreateTask) {
