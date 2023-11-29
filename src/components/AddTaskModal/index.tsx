@@ -120,11 +120,19 @@ const AddTaskModal: React.FC<IProps> = ({ children }) => {
       description,
       completed: completedTask,
     };
+
+    let result = true;
+
     if (modalData.task) {
       const { id } = modalData.task;
       await editTask(id, newTask);
     } else {
-      await createTask(newTask);
+      result = await createTask(newTask);
+    }
+
+    if (!result) {
+      return (callbackError.current.textContent =
+        "An unknown error happened in the server. Please, try again later.");
     }
 
     vanishModal();
